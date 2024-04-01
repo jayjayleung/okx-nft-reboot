@@ -2,11 +2,13 @@ package com.nft.reboot.main;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.setting.Setting;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Scanner;
@@ -23,16 +25,16 @@ public class MainApplicaiton {
         Setting setting = new Setting("config.setting");
         String wallet = setting.get("wallet");
         String tokenPath = setting.get("tokenPath");
-        System.out.println(wallet);
-        System.out.println(tokenPath);
+        // System.out.println(wallet);
+        // System.out.println(tokenPath);
         File file = FileUtil.touch(tokenPath);
-        System.out.println(FileUtil.exist(file));
-        System.out.println(FileUtil.isEmpty(file));
+        // System.out.println(FileUtil.exist(file));
+        // System.out.println(FileUtil.isEmpty(file));
         boolean flag = true;
         while (flag) {
-            clearConsole();
-            int acction = getAction();
-            switch (acction) {
+            // clearConsole();
+            int action = getAction();
+            switch (action) {
                 case 1:
                     System.out.println("配置文件路径为：" + wallet);
                     break;
@@ -82,10 +84,15 @@ public class MainApplicaiton {
     }
 
     public static void clearConsole() {
-        // 使用System.out.print方法来清除控制台内容
-        System.out.print("\033[H\033[2J");
-        // 还可以刷新缓冲区，确保清屏操作立即生效
-        System.out.flush();
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                Runtime.getRuntime().exec("clear");
+            }
+        } catch (IOException | InterruptedException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }
