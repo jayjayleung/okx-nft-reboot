@@ -1,12 +1,10 @@
 package com.nft.reboot.util;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -30,7 +28,7 @@ public class ElementUtil {
             By by = By.xpath(xpath);
             waiting(driver, by);
             return true;
-        }catch (TimeoutException e){
+        } catch (TimeoutException e) {
             return false;
         }
     }
@@ -48,28 +46,54 @@ public class ElementUtil {
             By by = By.tagName(tagName);
             waiting(driver, by);
             return true;
-        }catch (TimeoutException e){
+        } catch (TimeoutException e) {
             return false;
         }
     }
 
 
     public static WebElement findText(WebDriver driver, String text) {
-        String xpath = "//*[text()='"+text+"']";
+        String xpath = "//*[text()='" + text + "']";
         By by = By.xpath(xpath);
         waiting(driver, by);
         WebElement element = driver.findElement(by);
         return element;
     }
 
+    public static WebElement findButtonText(WebDriver driver, String text) {
+        By by = By.cssSelector("button span:contains('" + text + "')");
+        waiting(driver, by);
+        WebElement button = driver.findElement(by);
+
+        return button;
+    }
+
     public static boolean isExitByText(WebDriver driver, String text) {
         try {
 
-            String xpath = "//*[text()='"+text+"']";
+            String xpath = "//*[text()='" + text + "']";
+//            String xpath = "//*[contains(text()='" + text + "')]";
             By by = By.xpath(xpath);
             waiting(driver, by);
             return true;
-        }catch (TimeoutException e){
+        } catch (TimeoutException e) {
+            return false;
+        } catch (NoSuchWindowException e) {
+            return false;
+        }
+    }
+
+    public static boolean isExitByText2(WebDriver driver, String text) {
+        try {
+
+//            String xpath = "//*[text()='"+text+"']";
+            String xpath = "//*[contains(text()='" + text + "')]";
+            By by = By.xpath(xpath);
+            List<WebElement> elements = driver.findElements(by);
+            return elements.size() > 0;
+        } catch (TimeoutException e) {
+            return false;
+        } catch (NoSuchWindowException e) {
             return false;
         }
     }
@@ -85,9 +109,10 @@ public class ElementUtil {
         try {
 
             By by = By.linkText(linkText);
-            waiting(driver, by);
             return true;
-        }catch (TimeoutException e){
+        } catch (TimeoutException e) {
+            return false;
+        } catch (NoSuchWindowException e) {
             return false;
         }
     }

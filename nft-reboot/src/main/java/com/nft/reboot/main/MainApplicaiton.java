@@ -2,8 +2,11 @@ package com.nft.reboot.main;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.cron.CronUtil;
+import cn.hutool.cron.task.Task;
 import cn.hutool.setting.Setting;
 
 import java.io.File;
@@ -22,6 +25,8 @@ import java.util.Scanner;
 public class MainApplicaiton {
 
     public static void main(String[] args) {
+        System.setProperty("proxyHost", "127.0.0.1");
+        System.setProperty("proxyPort", "7890");
         Setting setting = new Setting("config.setting");
         String wallet = setting.get("wallet");
         String tokenPath = setting.get("tokenPath");
@@ -45,8 +50,27 @@ public class MainApplicaiton {
                     break;
                 case 3:
                     List<String> strings = FileUtil.readUtf8Lines(file);
-                    System.out.println("当前token如下：");
-                    strings.forEach(System.out::println);
+                    if(CollUtil.isNotEmpty(strings)) {
+                        System.out.println("当前token如下：");
+                        strings.forEach(System.out::println);
+                    }else{
+                        System.out.println("当前没有token");
+                    }
+                    break;
+                case 4:
+                    flag = false;
+                    System.out.println("开始执行.....");
+                    new ApiApplication().run(file);
+                    CronUtil.schedule("*/1 * * * *", new Task() {
+                        @Override
+                        public void execute() {
+                            Console.log("Task excuted.");
+                            new ApiApplication().run(file);
+                        }
+                    });
+                    // 支持秒级别定时任务
+                    CronUtil.setMatchSecond(true);
+                    CronUtil.start(true);
                     break;
                 case 0:
                     flag = false;
@@ -57,12 +81,13 @@ public class MainApplicaiton {
 
     }
 
-    public static int getAction(){
+    public static int getAction() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("请输入序号："); // 打印提示
         System.out.println("1：查看配置路径"); // 打印提示
         System.out.println("2：追加一个token"); // 打印提示
         System.out.println("3：列出所有token"); // 打印提示
+        System.out.println("4：开始监控"); // 打印提示
         System.out.println("0：退出"); // 打印提示
         System.out.printf(":");
         int action = scanner.nextInt();
@@ -70,10 +95,10 @@ public class MainApplicaiton {
     }
 
 
-    public static String getStr(){
+    public static String getStr() {
         Scanner scanner = new Scanner(System.in);
         String str = "";
-        if(scanner.hasNextLine()) {
+        if (scanner.hasNextLine()) {
             str = scanner.nextLine();
             if (StrUtil.isBlank(str)) {
                 System.out.print("不能为空，请重新输入：");
