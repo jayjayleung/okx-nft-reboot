@@ -50,27 +50,27 @@ public class MainApplicaiton {
                     break;
                 case 3:
                     List<String> strings = FileUtil.readUtf8Lines(file);
-                    if(CollUtil.isNotEmpty(strings)) {
+                    if (CollUtil.isNotEmpty(strings)) {
                         System.out.println("当前token如下：");
                         strings.forEach(System.out::println);
-                    }else{
+                    } else {
                         System.out.println("当前没有token");
                     }
                     break;
                 case 4:
                     flag = false;
-                    System.out.println("开始执行.....");
-                    new ApiApplication().run(file);
-                    CronUtil.schedule("*/1 * * * *", new Task() {
-                        @Override
-                        public void execute() {
-                            Console.log("Task excuted.");
-                            new ApiApplication().run(file);
+                    System.out.println("开始执行...间隔一分钟");
+                    boolean run = true;
+                    while (run) {
+                        System.out.println("开始执行...间隔一分钟");
+                        new ApiApplication().run(file);
+                        System.out.println("执行完成，休息一分钟");
+                        try {
+                            Thread.sleep(60000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
                         }
-                    });
-                    // 支持秒级别定时任务
-                    CronUtil.setMatchSecond(true);
-                    CronUtil.start(true);
+                    }
                     break;
                 case 0:
                     flag = false;
