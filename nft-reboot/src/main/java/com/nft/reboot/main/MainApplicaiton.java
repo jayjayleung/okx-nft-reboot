@@ -59,7 +59,6 @@ public class MainApplicaiton {
                     break;
                 case 4:
                     flag = false;
-                    System.out.println("开始执行...间隔一分钟");
                     boolean run = true;
                     while (run) {
                         System.out.println("开始执行...间隔一分钟");
