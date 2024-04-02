@@ -41,7 +41,7 @@ public class MainApplicaiton {
             int action = getAction();
             switch (action) {
                 case 1:
-                    System.out.println("配置文件路径为：" + wallet);
+                    System.out.println("配置文件路径为：" + tokenPath);
                     break;
                 case 2:
                     System.out.print("输入token名称:");
