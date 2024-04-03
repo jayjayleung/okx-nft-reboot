@@ -77,10 +77,26 @@ public class ElementUtil {
     }
 
     public static boolean exitByText(WebDriver driver, String text) {
+        try {
             String xpath = "//*[text()='" + text + "']";
 //            String xpath = "//*[contains(text()='" + text + "')]";
             By by = By.xpath(xpath);
             return SeleniumUtil.isElementPresent(driver, by);
+        }catch (Exception e){
+            return false;
+        }
+
+    }
+    public static boolean exitContainsByText(WebDriver driver, String text) {
+
+        try {
+//        String xpath = "//*[text()='" + text + "']";
+            String xpath = "//*[contains(text()='" + text + "')]";
+            By by = By.xpath(xpath);
+            return SeleniumUtil.isElementPresent(driver, by);
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public static By getByText(String text) {

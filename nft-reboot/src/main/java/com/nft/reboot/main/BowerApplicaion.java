@@ -179,6 +179,12 @@ public class BowerApplicaion {
                         flag = true;
                     }
                 }
+                ElementUtil.exitByText(driver,"余额不足");
+                if(ElementUtil.exitContainsByText(driver,"余额不足")){
+                    System.err.println("余额不足");
+                    ElementUtil.findText(driver,"取消").click();
+                    continue;
+                }
 //            ElementUtil.findText(driver,"确定").click();
                 ElementUtil.findText(driver,"取消").click();
                 System.out.println("购买完成，继续下一个");
