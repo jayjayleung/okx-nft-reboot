@@ -60,13 +60,6 @@ public class ElementUtil {
         return element;
     }
 
-    public static WebElement findButtonText(WebDriver driver, String text) {
-        By by = By.cssSelector("button span:contains('" + text + "')");
-        waiting(driver, by);
-        WebElement button = driver.findElement(by);
-
-        return button;
-    }
 
     public static boolean isExitByText(WebDriver driver, String text) {
         try {
@@ -74,13 +67,28 @@ public class ElementUtil {
             String xpath = "//*[text()='" + text + "']";
 //            String xpath = "//*[contains(text()='" + text + "')]";
             By by = By.xpath(xpath);
-            waiting(driver, by);
+            waiting5s(driver, by);
             return true;
         } catch (TimeoutException e) {
             return false;
         } catch (NoSuchWindowException e) {
             return false;
         }
+    }
+
+    public static boolean exitByText(WebDriver driver, String text) {
+            String xpath = "//*[text()='" + text + "']";
+//            String xpath = "//*[contains(text()='" + text + "')]";
+            By by = By.xpath(xpath);
+            return SeleniumUtil.isElementPresent(driver, by);
+    }
+
+    public static By getByText(String text) {
+
+        String xpath = "//*[text()='" + text + "']";
+//            String xpath = "//*[contains(text()='" + text + "')]";
+        By by = By.xpath(xpath);
+        return by;
     }
 
     public static boolean isExitByText2(WebDriver driver, String text) {
@@ -126,6 +134,12 @@ public class ElementUtil {
         WebDriverWait webDriverWait = new WebDriverWait(driver, 15);
         webDriverWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
     }
+
+    public static void waiting(WebDriver driver, By by,long time) {
+        WebDriverWait webDriverWait = new WebDriverWait(driver, 15);
+        webDriverWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
+    }
+
 
     public static void waiting5s(WebDriver driver, By by) {
         WebDriverWait webDriverWait = new WebDriverWait(driver, 5);

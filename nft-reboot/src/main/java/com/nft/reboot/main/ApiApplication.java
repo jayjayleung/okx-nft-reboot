@@ -3,14 +3,12 @@ package com.nft.reboot.main;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.setting.Setting;
 import com.nft.reboot.entity.TokenInfo;
 import com.nft.reboot.entity.TokenSaleInfo;
 import com.nft.reboot.util.ApiUtil;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +35,9 @@ public class ApiApplication {
                     System.out.println("查询到"+tokens.get(i)+"集合，开始筛选低于地板价的nft");
                     List<TokenSaleInfo> collect = market.stream().filter(item -> item.getSalePrice() < rank.getFloorPrice()).collect(Collectors.toList());
                     if(CollUtil.isNotEmpty(collect)){
+                        for (TokenSaleInfo tokenSaleInfo : collect) {
+                            System.out.println(tokenSaleInfo.getName()+"价格:"+tokenSaleInfo.getSalePrice());
+                        }
                         System.out.println("筛选到低于地板价的nft，数量为"+collect.size());
                         new BowerApplicaion().run(collect);
                     }

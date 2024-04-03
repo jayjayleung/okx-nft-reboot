@@ -1,11 +1,13 @@
 package com.nft.reboot.main;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.setting.Setting;
 import com.nft.reboot.entity.TokenSaleInfo;
 import com.nft.reboot.util.ElementUtil;
+import com.nft.reboot.util.SeleniumUtil;
 import com.nft.reboot.util.WindowUtil;
 import org.junit.Test;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,10 +15,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author liangshijie
@@ -40,7 +39,47 @@ public class BowerApplicaion {
             System.setProperty("webdriver.chrome.driver", "D:\\chromedriver.exe");
             System.out.println("准备打开Chrome浏览器");
             ChromeOptions options = new ChromeOptions();
+//            options.setHeadless(Boolean.TRUE);
             options.addArguments("--user-data-dir=D:/Chrome/default2/");
+            // 浏览器窗口 最大化
+            // options.addArguments("--start-maximized");
+
+            // 忽略掉证书错误
+            // /36.html
+            // options.setExperimentalOption("excludeSwitches", "ignore-certificate-errors");
+            // options.setExperimentalOption("excludeSwitches", "enable-automation");
+
+            // 禁止显示：Chrome 正在受到自动软件的控制
+            options.setExperimentalOption("excludeSwitches", CollectionUtil.toList("enable-automation", "ignore-certificate-errors"));
+            // 禁止显示：请停用以开发者…
+            options.setExperimentalOption("useAutomationExtension", false);
+            options.setExperimentalOption("w3c", false);
+            // 禁止显示：“保存密码”弹框
+            Map<String, Object> prefsMap = new HashMap<>();
+            prefsMap.put("credentials_enable_service", false);
+            prefsMap.put("profile.password_manager_enabled", false);
+            options.setExperimentalOption("prefs", prefsMap);
+
+            options.addArguments("lang=zh-CN,zh,zh-TW,en-US,en");
+//            options.addArguments("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36");
+            // options.addArguments("disable-infobars");
+            // options.addArguments("--no-sandbox");
+            options.addArguments("disable-blink-features=AutomationControlled"); // 就是这一行告诉chrome去掉了webdriver痕迹
+            options.addArguments("--ignore-certificate-errors"); // 忽略掉证书错误
+//            options.addArguments("--disable-extensions");//禁用扩展程序
+
+            // 屏蔽 youtube、google等网站的资源
+            options.addArguments("--host-resolver-rules=MAP www.youtube.com 127.0.0.1" +
+                    ",MAP www.google.com 127.0.0.1" +
+                    ",MAP cmacgm.matomo.cloud 127.0.0.1" +
+                    ",MAP ec.walkme.com 127.0.0.1" +
+                    ",MAP www.googletagmanager.com 127.0.0.1" +
+                    ",MAP www.freeprivacypolicy.com 127.0.0.1" +
+                    ",MAP www.googletagmanager.com 127.0.0.1" +
+                    ",MAP s.go-mpulse.net 127.0.0.1" +
+                    // ",MAP cdnjs.cloudflare.com 127.0.0.1" +
+                    ",MAP geolocation.onetrust.com 127.0.0.1"
+            );
 //        options.addArguments("disable_gpu");
 //        options.addArguments("no-sandbox");//禁用沙盒
             //设置用户
@@ -75,8 +114,8 @@ public class BowerApplicaion {
                 System.out.println("开始购买...");
                 WebElement buy = ElementUtil.findText(driver, "购买");
                 if(buy ==null){
-                    if(ElementUtil.isExitByText2(driver,"该铭文正在交易中，在交易确认之前无法交易或转移")){
-                        System.out.println("该铭文正在交易中，在交易确认之前无法交易或转移,跳过");
+                    if(ElementUtil.exitByText(driver,"该铭文正在交易中，在交易确认之前无法交易或转移")){
+                        System.err.println("该铭文正在交易中，在交易确认之前无法交易或转移,跳过");
                         continue;
                     }
                     System.out.println("找不到购买按钮，跳过");
@@ -86,15 +125,20 @@ public class BowerApplicaion {
                 System.out.println("使用"+wallet+"钱包购买");
 
                 if(!flag) {
+                    ElementUtil.findText(driver, "欧易钱包").click();
+                    boolean elementPresent = SeleniumUtil.isElementPresent(driver, By.xpath("//*[text()='立即安装']"));
+                    if(elementPresent){
+                        System.err.println("未安装钱包插件，请先安装");
+                        return;
+                    }
                     try {
-                        ElementUtil.findText(driver, "欧易钱包").click();
-                    } catch (Exception e) {
-                        if (ElementUtil.isExitByText(driver, "立即安装")) {
-                            System.out.println("未安装钱包插件，请先安装");
+                        ElementUtil.findXpath(driver, "//button/span[normalize-space()='连接钱包']").click();
+                    }catch (NoSuchElementException e) {
+                        if(elementPresent){
+                            System.err.println("未安装钱包插件，请先安装");
                             return;
                         }
                     }
-                    ElementUtil.findXpath(driver, "//button/span[normalize-space()='连接钱包']").click();
 
                     //等待
                     try {
@@ -110,7 +154,7 @@ public class BowerApplicaion {
                         WindowUtil.swichToNextWindow(driver, windowHandles);
                         System.out.println(driver.getWindowHandle());
                         System.out.println(driver.getTitle());
-                        if (ElementUtil.isExitByText(driver, "解锁")) {
+                        if (ElementUtil.exitByText(driver, "解锁")) {
                             WebElement metaMaskPassWordEle = ElementUtil.findXpath(driver, "//input[@placeholder='请输入密码']");
                             metaMaskPassWordEle.sendKeys("a123478.");
                             WebElement lockUpEle = ElementUtil.findText(driver, "解锁");
@@ -144,6 +188,46 @@ public class BowerApplicaion {
             driver.quit();
         }
 
+    }
+
+    public void buy(WebDriver driver){
+        //等待
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        String nftHandle = driver.getWindowHandle();
+        Set<String> windowHandles = driver.getWindowHandles();
+        System.out.println(nftHandle);
+        System.out.println(windowHandles.size());
+        if (windowHandles.size() > 1) {
+            WindowUtil.swichToNextWindow(driver, windowHandles);
+            System.out.println(driver.getWindowHandle());
+            System.out.println(driver.getTitle());
+            if (ElementUtil.isExitByText(driver, "解锁")) {
+                WebElement metaMaskPassWordEle = ElementUtil.findXpath(driver, "//input[@placeholder='请输入密码']");
+                metaMaskPassWordEle.sendKeys("a123478.");
+                WebElement lockUpEle = ElementUtil.findText(driver, "解锁");
+//                ElementUtil.findXpath(driver,"//button/span[normalize-space()='解锁']").click();
+                lockUpEle.click();
+            }
+            System.out.println("----");
+            //等待
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(driver.getWindowHandle());
+            System.out.println(driver.getTitle());
+            if (driver.getWindowHandles().size() > 1) {
+                if (ElementUtil.isExitByText(driver, "连接")) {
+                    ElementUtil.findText(driver, "连接").click();
+                }
+            }
+            WindowUtil.swichToWindow(driver, nftHandle);
+        }
     }
 
 //    public void dddd(){
