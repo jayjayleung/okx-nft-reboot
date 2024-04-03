@@ -2,6 +2,8 @@ package com.nft.reboot.entity;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @Author liangshijie
  * @Date 2024/4/2
@@ -14,5 +16,5 @@ public class TokenInfo {
     private String name;
     private String currency;
     private Integer chain;
-    private Double floorPrice;
+    private BigDecimal floorPrice;
 }

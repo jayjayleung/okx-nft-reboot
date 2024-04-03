@@ -9,9 +9,11 @@ import cn.hutool.json.JSON;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import cn.hutool.setting.Setting;
 import com.nft.reboot.entity.TokenInfo;
 import com.nft.reboot.entity.TokenSaleInfo;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +29,12 @@ import java.util.stream.Collectors;
 public class ApiUtil {
     public static void main(String[] args) {
 
-        System.setProperty("proxyHost", "127.0.0.1");
-        System.setProperty("proxyPort", "7890");
+        Setting setting = new Setting(DirUtil.getUserDir()+"config.setting");
+        String proxyEnable = setting.getStr("proxyEnable");
+        if("1".equals(proxyEnable)) {
+            System.setProperty("proxyHost", setting.getStr("proxyIp"));
+            System.setProperty("proxyPort", setting.getStr("proxyPort"));
+        }
         TokenInfo rank = getRank("INK");
         System.out.println(JSONUtil.toJsonStr(rank));
         List<TokenSaleInfo> market = getMarket(rank.getId());
@@ -71,7 +77,7 @@ public class ApiUtil {
             tokenInfo.setChain(itemJson.getInt("chain"));
             tokenInfo.setCurrency(itemJson.getStr("currency"));
             JSONObject floorNativePrice = itemJson.getJSONObject("floorNativePrice");
-            tokenInfo.setFloorPrice(floorNativePrice.getDouble("price"));
+            tokenInfo.setFloorPrice(new BigDecimal(floorNativePrice.getStr("price")));
             return tokenInfo;
         }).filter(item -> item.getName().equals(nameLike)).findAny();
 
@@ -118,7 +124,7 @@ public class ApiUtil {
             tokenInfo.setChain(itemJson.getInt("chain"));
             JSONObject sale = itemJson.getJSONObject("sale");
             tokenInfo.setCurrency(sale.getStr("currency"));
-            tokenInfo.setSalePrice(sale.getDouble("price"));
+            tokenInfo.setSalePrice(new BigDecimal(sale.getDouble("price")));
             return tokenInfo;
         }).collect(Collectors.toList());
         return collect;

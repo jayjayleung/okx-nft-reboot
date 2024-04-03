@@ -1,0 +1,26 @@
+#钱包名称，暂时无用
+wallet=欧易钱包
+
+#钱包密码
+walletPassword=a123478.
+
+#token文件路径，不填默认当前目录下
+tokenPath=
+
+#驱动文件路径，不填默认当前目录下
+driverPath=
+
+#浏览器数据文件路径，不填默认当前目录下
+chromeCachePath=
+
+#间隔多少分钟执行一次，建议不少于3分钟
+time=5
+
+#代理开关 1 开启，0 关闭 (需要科学上网的一定要开启)
+proxyEnable=1
+
+#代理IP 本地一般是127.0.0.1
+proxyIp=127.0.0.1
+
+#代理端口 看工具,clash默认是7890
+proxyPort=7890
