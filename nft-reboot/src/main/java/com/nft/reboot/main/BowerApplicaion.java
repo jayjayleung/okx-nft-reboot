@@ -16,11 +16,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Author liangshijie
@@ -29,14 +27,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class BowerApplicaion {
 
-    final static String ANSI_RESET = "\u001B[0m";
-    final static String ANSI_RED = "\u001B[31m";
-    final static String ANSI_GREEN = "\u001B[32m";
-    final static String ANSI_YELLOW = "\u001B[33m";
+    final static String ANSI_RESET = "";
+    final static String ANSI_RED = "";
+    final static String ANSI_GREEN = "";
+    final static String ANSI_YELLOW = "";
 
     public void initWallet() {
         Setting setting = new Setting(DirUtil.getUserDir() + "config.setting");
-        setting.autoLoad(true);
         System.setProperty("webdriver.chrome.driver", setting.getStrNotEmpty("driverPath", AbsSetting.DEFAULT_GROUP, DirUtil.getUserDir() + "chromedriver.exe"));
         WebDriver driver = new ChromeDriver(getOptions());
         driver.manage().window().maximize();
@@ -45,7 +42,7 @@ public class BowerApplicaion {
 
     public static ChromeOptions getOptions() {
         Setting setting = new Setting(DirUtil.getUserDir() + "config.setting");
-        setting.autoLoad(true);
+        // setting.autoLoad(true);
         ChromeOptions options = new ChromeOptions();
 
         //            options.setHeadless(Boolean.TRUE);
@@ -100,7 +97,7 @@ public class BowerApplicaion {
         WebDriver driver = null;
         try {
             Setting setting = new Setting(DirUtil.getUserDir() + "config.setting");
-            setting.autoLoad(true);
+            // setting.autoLoad(true);
             System.setProperty("webdriver.chrome.driver", setting.getStrNotEmpty("driverPath", AbsSetting.DEFAULT_GROUP, DirUtil.getUserDir() + "\\chromedriver.exe"));
             String wallet = setting.getStrNotEmpty("wallet", AbsSetting.DEFAULT_GROUP, "欧易钱包");
             System.out.println("准备打开Chrome浏览器");
@@ -136,17 +133,17 @@ public class BowerApplicaion {
                 }
                 System.out.println("已打开编码：" + tokenSaleInfo.getName() + "的NFT");
                 if (!ElementUtil.exitByText(driver, "购买")) {
-                    System.out.println(ANSI_RED + "没有找到购买按钮，猜测已经购买，下一个" + ANSI_RESET);
+                    System.err.println(ANSI_RED + "没有找到购买按钮，猜测已经购买，下一个" + ANSI_RESET);
                     continue;
                 }
                 System.out.println("开始购买...");
                 WebElement buy = ElementUtil.findText(driver, "购买");
                 if (buy == null) {
                     if (ElementUtil.exitByText(driver, "该铭文正在交易中，在交易确认之前无法交易或转移")) {
-                        System.out.println("该铭文正在交易中，在交易确认之前无法交易或转移,跳过");
+                        System.err.println("该铭文正在交易中，在交易确认之前无法交易或转移,跳过");
                         continue;
                     }
-                    System.out.println("找不到购买按钮，跳过");
+                    System.err.println("找不到购买按钮，跳过");
                     continue;
                 }
                 buy.click();
@@ -156,14 +153,14 @@ public class BowerApplicaion {
                     ElementUtil.findText(driver, "欧易钱包").click();
                     boolean elementPresent = SeleniumUtil.isElementPresent(driver, By.xpath("//*[text()='立即安装']"));
                     if (elementPresent) {
-                        System.out.println(ANSI_RED + "未安装钱包插件，请先安装" + ANSI_RESET);
+                        System.err.println(ANSI_RED + "未安装钱包插件，请先安装" + ANSI_RESET);
                         return;
                     }
                     try {
                         ElementUtil.findXpath(driver, "//button/span[normalize-space()='连接钱包']").click();
                     } catch (NoSuchElementException e) {
                         if (elementPresent) {
-                            System.out.println(ANSI_RED + "未安装钱包插件，请先安装" + ANSI_RESET);
+                            System.err.println(ANSI_RED + "未安装钱包插件，请先安装" + ANSI_RESET);
                             return;
                         }
                     }
@@ -205,12 +202,12 @@ public class BowerApplicaion {
                 }
                 sleep(500);
                 if (ElementUtil.exitContainsByText(driver, "余额不足")) {
-                    System.out.println(ANSI_RED + "余额不足" + ANSI_RESET);
+                    System.err.println(ANSI_RED + "余额不足" + ANSI_RESET);
                     ElementUtil.findText(driver, "取消").click();
                     continue;
                 }
                 if (ElementUtil.exitContainsByText(driver, "订单失效")) {
-                    System.out.println(ANSI_RED + "该订单已被成交或取消，请选择其他订单进行交易" + ANSI_RESET);
+                    System.err.println(ANSI_RED + "该订单已被成交或取消，请选择其他订单进行交易" + ANSI_RESET);
                     ElementUtil.findText(driver, "继续交易").click();
                     continue;
                 }
@@ -220,7 +217,7 @@ public class BowerApplicaion {
                 sleep(500);
                 if (ElementUtil.exitByText(driver, "立即购买")) {
                     ElementUtil.findText(driver, "确认").click();
-                    System.out.println(ANSI_YELLOW + "确认购买" + ANSI_RESET);
+                    System.err.println(ANSI_YELLOW + "确认购买" + ANSI_RESET);
                     buy(driver);
                 }
                 // ElementUtil.findText(driver,"取消").click();

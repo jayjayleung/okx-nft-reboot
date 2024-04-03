@@ -3,9 +3,11 @@ package com.nft.reboot.main;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.setting.Setting;
 import com.nft.reboot.entity.TokenInfo;
 import com.nft.reboot.entity.TokenSaleInfo;
 import com.nft.reboot.util.ApiUtil;
+import com.nft.reboot.util.DirUtil;
 
 import java.io.File;
 import java.util.List;
@@ -18,12 +20,18 @@ import java.util.stream.Collectors;
  */
 public class ApiApplication {
 
-    final static String ANSI_RESET = "\u001B[0m";
-    final static String ANSI_RED = "\u001B[31m";
-    final static String ANSI_GREEN = "\u001B[32m";
-    final static String ANSI_YELLOW = "\u001B[33m";
+    final static String ANSI_RESET = "";
+    final static String ANSI_RED = "";
+    final static String ANSI_GREEN = "";
+    final static String ANSI_YELLOW = "";
 
     public void run(File tokenFile){
+        Setting setting = new Setting(DirUtil.getUserDir()+"config.setting");
+        String proxyEnable = setting.getStr("proxyEnable");
+        if("1".equals(proxyEnable)) {
+            System.setProperty("proxyHost", setting.getStr("proxyIp"));
+            System.setProperty("proxyPort", setting.getStr("proxyPort"));
+        }
         List<String> tokens = FileUtil.readUtf8Lines(tokenFile);
         for (int i = 0; i < tokens.size(); i++) {
             System.out.println("开始查询"+tokens.get(i));
@@ -40,13 +48,13 @@ public class ApiApplication {
                     System.out.println("查询到"+tokens.get(i)+"集合，开始筛选低于地板价:"+rank.getFloorPrice().toString()+"的nft");
                     List<TokenSaleInfo> collect = market.stream().filter(item -> item.getSalePrice().doubleValue() < rank.getFloorPrice().doubleValue()).collect(Collectors.toList());
                     if(CollUtil.isNotEmpty(collect)){
-                        System.out.println(ANSI_YELLOW+"筛选到低于地板价:"+rank.getFloorPrice().toString()+"的nft，数量为"+collect.size()+ANSI_RESET);
+                        System.err.println(ANSI_YELLOW+"筛选到低于地板价:"+rank.getFloorPrice().toString()+"的nft，数量为"+collect.size()+ANSI_RESET);
                         for (TokenSaleInfo tokenSaleInfo : collect) {
-                            System.out.println(ANSI_YELLOW+tokenSaleInfo.getName()+"价格:"+tokenSaleInfo.getSalePrice().toString()+ANSI_RESET);
+                            System.err.println(ANSI_YELLOW+tokenSaleInfo.getName()+"价格:"+tokenSaleInfo.getSalePrice().toString()+ANSI_RESET);
                         }
                         new BowerApplicaion().run(collect);
                     }else{
-                        System.out.println(ANSI_YELLOW+"没有筛选到低于地板价:"+rank.getFloorPrice().toString()+"的nft"+ANSI_RESET);
+                        System.err.println(ANSI_YELLOW+"没有筛选到低于地板价:"+rank.getFloorPrice().toString()+"的nft"+ANSI_RESET);
                     }
 
                 }

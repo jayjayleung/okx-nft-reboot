@@ -21,20 +21,22 @@ import java.util.Scanner;
  */
 public class MainApplicaiton {
 
-    final static String ANSI_RESET = "\u001B[0m";
-    final static String ANSI_RED = "\u001B[31m";
-    final static String ANSI_GREEN = "\u001B[32m";
-    final static String ANSI_YELLOW = "\u001B[33m";
+    // final static String ANSI_RESET = "\u001B[0m";
+    // final static String ANSI_RED = "\u001B[31m";
+    // final static String ANSI_GREEN = "\u001B[32m";
+    // final static String ANSI_YELLOW = "\u001B[33m";
+    final static String ANSI_RESET = "";
+    final static String ANSI_RED = "";
+    final static String ANSI_GREEN = "";
+    final static String ANSI_YELLOW = "";
 
     public static void main(String[] args) {
-        System.setProperty("proxyHost", "127.0.0.1");
-        System.setProperty("proxyPort", "7890");
         Setting setting = new Setting(DirUtil.getUserDir() + "config.setting");
-        setting.autoLoad(true);
-        System.out.println(DirUtil.getUserDir() + "config.setting");
+        // setting.autoLoad(true);
+        // System.out.println(DirUtil.getUserDir() + "config.setting");
         String tokenPath = setting.getStrNotEmpty("tokenPath", AbsSetting.DEFAULT_GROUP, DirUtil.getUserDir() + "tokens.txt");
         // System.out.println(wallet);
-        System.out.println(tokenPath);
+        // System.out.println(tokenPath);
         File file = FileUtil.touch(tokenPath);
         // System.out.println(FileUtil.exist(file));
         // System.out.println(FileUtil.isEmpty(file));
@@ -159,8 +161,6 @@ public class MainApplicaiton {
                                 break;
                             case "0":
                                 flag2 = false;
-                                setting.store("config.setting");
-                                setting.load();
                                 break;
                             default:
                                 break;
@@ -217,7 +217,7 @@ public class MainApplicaiton {
         if (scanner.hasNextLine()) {
             str = scanner.nextLine();
             if (StrUtil.isBlank(str)) {
-                System.out.print("不能为空，请重新输入：");
+                System.err.print("不能为空，请重新输入：");
                 getStr();
             }
         }
