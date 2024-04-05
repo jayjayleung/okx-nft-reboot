@@ -1,13 +1,13 @@
-package com.nft.reboot.main;
+package com.nft.robot.main;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.setting.AbsSetting;
 import cn.hutool.setting.Setting;
-import com.nft.reboot.entity.TokenSaleInfo;
-import com.nft.reboot.util.DirUtil;
-import com.nft.reboot.util.ElementUtil;
-import com.nft.reboot.util.SeleniumUtil;
-import com.nft.reboot.util.WindowUtil;
+import com.nft.robot.entity.TokenSaleInfo;
+import com.nft.robot.util.DirUtil;
+import com.nft.robot.util.ElementUtil;
+import com.nft.robot.util.SeleniumUtil;
+import com.nft.robot.util.WindowUtil;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;

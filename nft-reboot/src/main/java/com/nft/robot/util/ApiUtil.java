@@ -1,4 +1,4 @@
-package com.nft.reboot.util;
+package com.nft.robot.util;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
@@ -7,8 +7,8 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.hutool.setting.Setting;
-import com.nft.reboot.entity.TokenInfo;
-import com.nft.reboot.entity.TokenSaleInfo;
+import com.nft.robot.entity.TokenInfo;
+import com.nft.robot.entity.TokenSaleInfo;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.nft.reboot.main;
+package com.nft.robot.main;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
@@ -6,7 +6,7 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.setting.AbsSetting;
 import cn.hutool.setting.Setting;
-import com.nft.reboot.util.DirUtil;
+import com.nft.robot.util.DirUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,14 +32,8 @@ public class MainApplicaiton {
 
     public static void main(String[] args) {
         Setting setting = new Setting(DirUtil.getUserDir() + "config.setting");
-        // setting.autoLoad(true);
-        // System.out.println(DirUtil.getUserDir() + "config.setting");
         String tokenPath = setting.getStrNotEmpty("tokenPath", AbsSetting.DEFAULT_GROUP, DirUtil.getUserDir() + "tokens.txt");
-        // System.out.println(wallet);
-        // System.out.println(tokenPath);
         File file = FileUtil.touch(tokenPath);
-        // System.out.println(FileUtil.exist(file));
-        // System.out.println(FileUtil.isEmpty(file));
         boolean flag = true;
         while (flag) {
             // clearConsole();

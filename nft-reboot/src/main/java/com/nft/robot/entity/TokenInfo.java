@@ -1,4 +1,4 @@
-package com.nft.reboot.entity;
+package com.nft.robot.entity;
 
 import lombok.Data;
 

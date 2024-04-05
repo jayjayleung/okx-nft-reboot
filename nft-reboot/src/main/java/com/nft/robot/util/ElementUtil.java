@@ -1,4 +1,4 @@
-package com.nft.reboot.util;
+package com.nft.robot.util;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
