@@ -200,7 +200,7 @@ public class BowerApplicaion {
                         flag = true;
                     }
                 }
-                sleep(500);
+                sleep(1000);
                 if (ElementUtil.exitContainsByText(driver, "余额不足")) {
                     System.err.println(ANSI_RED + "余额不足" + ANSI_RESET);
                     ElementUtil.findText(driver, "取消").click();
@@ -214,7 +214,7 @@ public class BowerApplicaion {
                 if (ElementUtil.exitByText(driver, "风险提示")) {
                     ElementUtil.findText(driver, "确认").click();
                 }
-                sleep(500);
+                sleep(1000);
                 if (ElementUtil.exitByText(driver, "立即购买")) {
                     ElementUtil.findText(driver, "确认").click();
                     System.err.println(ANSI_YELLOW + "确认购买" + ANSI_RESET);
