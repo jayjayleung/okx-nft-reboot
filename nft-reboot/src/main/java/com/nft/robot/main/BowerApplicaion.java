@@ -190,7 +190,7 @@ public class BowerApplicaion {
                         }
                         System.out.println("----");
                         //等待
-                        sleep(500);
+                        sleep(1500);
                         if (driver.getWindowHandles().size() > 1) {
                             if (ElementUtil.exitByText(driver, "连接")) {
                                 ElementUtil.findText(driver, "连接").click();
