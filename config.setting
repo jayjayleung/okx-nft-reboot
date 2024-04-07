@@ -17,7 +17,7 @@ chromeCachePath=
 time=5
 
 #代理开关 1 开启，0 关闭 (需要科学上网的一定要开启)
-proxyEnable=1
+proxyEnable=0
 
 #代理IP 本地一般是127.0.0.1
 proxyIp=127.0.0.1
