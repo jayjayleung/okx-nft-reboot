@@ -17,10 +17,14 @@ chromeCachePath=
 time=5
 
 #代理开关 1 开启，0 关闭 (需要科学上网的一定要开启)
-proxyEnable=0
+proxyEnable=1
 
 #代理IP 本地一般是127.0.0.1
 proxyIp=127.0.0.1
 
 #代理端口 看工具,clash默认是7890
 proxyPort=7890
+
+
+#低于地板价多少百分比购买
+threshold=0.5

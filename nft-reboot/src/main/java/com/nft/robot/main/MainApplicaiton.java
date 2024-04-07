@@ -33,6 +33,9 @@ public class MainApplicaiton {
     public static void main(String[] args) {
         Setting setting = new Setting(DirUtil.getUserDir() + "config.setting");
         String tokenPath = setting.getStrNotEmpty("tokenPath", AbsSetting.DEFAULT_GROUP, DirUtil.getUserDir() + "tokens.txt");
+        String threshold = setting.getStrNotEmpty("threshold", AbsSetting.DEFAULT_GROUP, "0.5");
+        System.out.println(threshold);
+
         File file = FileUtil.touch(tokenPath);
         boolean flag = true;
         while (flag) {
