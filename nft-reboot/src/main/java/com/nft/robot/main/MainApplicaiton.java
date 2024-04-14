@@ -47,7 +47,7 @@ public class MainApplicaiton {
                     System.out.println("nft文件路径为：" + tokenPath);
                     System.out.println("驱动路径为：" + setting.getStrNotEmpty("driverPath", AbsSetting.DEFAULT_GROUP, DirUtil.getUserDir() + "chromedriver.exe"));
                     System.out.println("谷歌浏览器缓存路径：" + setting.getStrNotEmpty("chromeCachePath", AbsSetting.DEFAULT_GROUP, DirUtil.getUserDir() + "Chrome\\default\\"));
-                    System.out.println("执行间隔(分钟)：" + setting.getStr("time"));
+                    System.out.println("执行间隔(秒)：" + setting.getStr("time"));
                     System.out.println("代理开关：" + setting.getInt("proxyEnable"));
                     System.out.println("代理IP：" + setting.getStr("proxyIp"));
                     System.out.println("代理端口：" + setting.getStr("proxyPort"));
@@ -76,16 +76,16 @@ public class MainApplicaiton {
                     boolean run = true;
                     Long time = setting.getLong("time", 3L);
                     while (run) {
-                        System.out.println("开始执行...间隔" + time + "分钟");
+                        System.out.println("开始执行...间隔" + time + "秒");
                         new ApiApplication().run(file);
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("执行完成，休息" + time + "分钟");
+                        System.out.println("执行完成，休息" + time + "秒");
                         try {
-                            Thread.sleep(time * 60 * 1000);
+                            Thread.sleep(time * 1000);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
