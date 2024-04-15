@@ -29,3 +29,4 @@ replay_pid*
 /target/classes/**
 /nft-robot/target/
 /nft-robot/.idea/
+/Chrome/
