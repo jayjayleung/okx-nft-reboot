@@ -3,6 +3,7 @@ package com.nft.robot.main;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.setting.AbsSetting;
 import cn.hutool.setting.Setting;
+import com.nft.robot.cache.SeetingManager;
 import com.nft.robot.entity.TokenSaleInfo;
 import com.nft.robot.util.DirUtil;
 import com.nft.robot.util.ElementUtil;
@@ -33,7 +34,7 @@ public class BowerApplicaion {
     final static String ANSI_YELLOW = "";
 
     public void initWallet() {
-        Setting setting = new Setting(DirUtil.getUserDir() + "config.setting");
+        Setting setting = SeetingManager.getSetting();
         System.setProperty("webdriver.chrome.driver", setting.getStrNotEmpty("driverPath", AbsSetting.DEFAULT_GROUP, DirUtil.getUserDir() + "chromedriver.exe"));
         WebDriver driver = new ChromeDriver(getOptions());
         driver.manage().window().maximize();
@@ -41,7 +42,7 @@ public class BowerApplicaion {
     }
 
     public static ChromeOptions getOptions() {
-        Setting setting = new Setting(DirUtil.getUserDir() + "config.setting");
+        Setting setting = SeetingManager.getSetting();
         // setting.autoLoad(true);
         ChromeOptions options = new ChromeOptions();
 
@@ -96,7 +97,7 @@ public class BowerApplicaion {
     public void run(List<TokenSaleInfo> list) {
         WebDriver driver = null;
         try {
-            Setting setting = new Setting(DirUtil.getUserDir() + "config.setting");
+            Setting setting = SeetingManager.getSetting();
             // setting.autoLoad(true);
             System.setProperty("webdriver.chrome.driver", setting.getStrNotEmpty("driverPath", AbsSetting.DEFAULT_GROUP, DirUtil.getUserDir() + "\\chromedriver.exe"));
             String wallet = setting.getStrNotEmpty("wallet", AbsSetting.DEFAULT_GROUP, "欧易钱包");
@@ -244,7 +245,7 @@ public class BowerApplicaion {
     }
 
     public void buy(WebDriver driver) {
-        Setting setting = new Setting(DirUtil.getUserDir() + "config.setting");
+        Setting setting = SeetingManager.getSetting();
         System.out.println("打开钱包");
         String nftHandle = driver.getWindowHandle();
         System.out.println(nftHandle);

@@ -8,6 +8,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.hutool.setting.AbsSetting;
 import cn.hutool.setting.Setting;
+import com.nft.robot.cache.SeetingManager;
 import com.nft.robot.entity.TokenInfo;
 import com.nft.robot.entity.TokenSaleInfo;
 
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 public class ApiUtil {
     public static void main(String[] args) {
 
-        Setting setting = new Setting(DirUtil.getUserDir()+"config.setting");
+        Setting setting = SeetingManager.getSetting();
         String proxyEnable = setting.getStr("proxyEnable");
         if("1".equals(proxyEnable)) {
             System.setProperty("proxyHost", setting.getStr("proxyIp"));

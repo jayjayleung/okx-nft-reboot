@@ -6,6 +6,7 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.setting.AbsSetting;
 import cn.hutool.setting.Setting;
+import com.nft.robot.cache.SeetingManager;
 import com.nft.robot.util.DirUtil;
 
 import java.io.File;
@@ -31,7 +32,7 @@ public class MainApplicaiton {
     final static String ANSI_YELLOW = "";
 
     public static void main(String[] args) {
-        Setting setting = new Setting(DirUtil.getUserDir() + "config.setting");
+        Setting setting = SeetingManager.getSetting();
         String tokenPath = setting.getStrNotEmpty("tokenPath", AbsSetting.DEFAULT_GROUP, DirUtil.getUserDir() + "tokens.txt");
         // String threshold = setting.getStrNotEmpty("threshold", AbsSetting.DEFAULT_GROUP, "0.5");
         // System.out.println(threshold);
