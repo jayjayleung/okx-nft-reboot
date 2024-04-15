@@ -190,7 +190,8 @@ public class MainApplicaiton {
         System.out.println(ANSI_RED + "*  1.浏览器地址栏输入：chrome://version/" + ANSI_RESET);
         System.out.println(ANSI_RED + "*  2.点击浏览器右上角三个点，设置->关于关于 Chrome 即可查看" + ANSI_RESET);
         System.out.println(ANSI_RED + "*驱动下载地址为(需要科学上网)：https://chromedriver.com/download" + ANSI_RESET);
-        System.out.println(ANSI_RED + "*注意：token文件路径是一行一个token，输入后请按回车再输入下一行，否则视为同一个token" + ANSI_RESET);
+        System.out.println(ANSI_RED + "*注意：token文件路径是一行一个toke,输入后请按回车再输入下一行，否则视为同一个token" + ANSI_RESET);
+        System.out.println(ANSI_RED + "*注意：token如果需要设置单独的地狱地板价百分比的,在后面加\"-\",百分比是小数点,50%就是0.5,如：eth-0.2" + ANSI_RESET);
         System.out.println("请输入序号："); // 打印提示
         System.out.println("1：查看配置"); // 打印提示
         System.out.println("2：追加一个token"); // 打印提示
